@@ -34,7 +34,7 @@ export default function CadetDashboard() {
     <Link to="#" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
       ✔️ Attendance
     </Link>
-    <Link to="#" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
+    <Link to="/drill-videos" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
       🎥 Drill Videos
     </Link>
     <Link to="#" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">

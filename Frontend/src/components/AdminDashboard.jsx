@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 
 export default function AdminDashboard() {
@@ -20,18 +19,26 @@ export default function AdminDashboard() {
             <p className="text-sm text-gray-500">Commanding Officer</p>
           </div>
           <nav className="mt-5">
-            {["Dashboard", "Manage Cadets", "Manage Events", "Drill Videos", "Attendance", "Reports"].map((item, idx) => (
-              <Link
-                key={idx}
-                to="#"
-                className={`flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium ${
-                  idx === 0 ? "bg-orange-400 text-white" : "text-gray-800 hover:bg-orange-100"
-                }`}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
+  <Link to="/admin" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium bg-orange-400 text-white">
+    Dashboard
+  </Link>
+  <Link to="/admin/manage-cadets" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+    Manage Cadets
+  </Link>
+  <Link to="/admin/manage-events" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+    Manage Events
+  </Link>
+  <Link to="/upload-drill" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+    Drill Videos
+  </Link>
+  <Link to="/admin/attendance" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+    Attendance
+  </Link>
+  <Link to="/admin/reports" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+    Reports
+  </Link>
+</nav>
+
         </div>
         <div className="p-4 border-t border-gray-300">
           <Link to="/" className="text-red-600 font-bold hover:underline">
@@ -43,7 +50,7 @@ export default function AdminDashboard() {
       {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
-
+        
         {/* Stat Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-6">
           {[
