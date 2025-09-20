@@ -36,4 +36,25 @@ router.post("/login", async (req, res) => {
   }
 });
 
+// Get all cadets
+router.get("/cadets", async (req, res) => {
+  try {
+    const cadets = await User.find({ role: "cadet" }).sort({ createdAt: -1 });
+    res.json(cadets);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch cadets" });
+  }
+});
+
+router.put("/update-profile/:id", async (req, res) => {
+  try {
+    const updated = await User.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json({ message: "Profile updated", user: updated });
+  } catch (err) {
+    res.status(500).json({ error: "Failed to update profile" });
+  }
+});
+
+
 module.exports = router;

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 export default function DrillVideosPage() {
   const [videos, setVideos] = useState([]);
+  const [activeVideo, setActiveVideo] = useState(null);
+
 
   useEffect(() => {
     fetch("http://localhost:5000/api/drill-videos")
@@ -22,12 +24,35 @@ export default function DrillVideosPage() {
             <video controls src={video.videoUrl} className="w-full h-40 object-cover rounded-md mb-3" />
             <h3 className="text-lg font-semibold text-gray-800">{video.title}</h3>
             <div className="text-sm text-gray-500">👁️ {video.views} views</div>
-            <button className="mt-3 px-4 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition">
-              Watch Now
-            </button>
+            <button
+  onClick={() => setActiveVideo(video.videoUrl)}
+  className="mt-3 px-4 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
+>
+  Watch Now
+</button>
+
           </div>
         ))}
       </section>
+      {activeVideo && (
+  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl relative">
+      <button
+        onClick={() => setActiveVideo(null)}
+        className="absolute top-2 right-2 text-red-600 font-bold text-xl"
+      >
+        ×
+      </button>
+      <video
+        src={activeVideo}
+        controls
+        autoPlay
+        className="w-full h-[400px] object-contain rounded"
+      />
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

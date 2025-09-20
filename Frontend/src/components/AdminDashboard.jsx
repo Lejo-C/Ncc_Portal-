@@ -22,7 +22,7 @@ export default function AdminDashboard() {
   <Link to="/admin" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium bg-orange-400 text-white">
     Dashboard
   </Link>
-  <Link to="/admin/manage-cadets" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
+  <Link to="/cadet-management" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
     Manage Cadets
   </Link>
   <Link to="/admin/manage-events" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">

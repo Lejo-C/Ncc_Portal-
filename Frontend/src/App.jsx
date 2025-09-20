@@ -7,6 +7,7 @@ import CadetDashboard from './Cadets/CadetDashboard';
 import AdminDashboard from './components/AdminDashboard';
 import DrillVideosPage from './Cadets/DrillVideos';
 import DrillVideoAdminPage from './components/DrillVideoAdminPage';
+import CadetManagementPage from './components/CadetManagementPage';
 
 function App() {
   
@@ -22,6 +23,7 @@ function App() {
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
         <Route path="/drill-videos" element={<DrillVideosPage />} />
         <Route path="/upload-drill" element={<DrillVideoAdminPage />} />
+        <Route path="/cadet-management" element={<CadetManagementPage />} />
       </Routes>
     </Router>
     </>
