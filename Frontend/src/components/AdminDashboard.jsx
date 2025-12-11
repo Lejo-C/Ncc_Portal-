@@ -1,6 +1,36 @@
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminDashboard() {
+  const [stats, setStats] = useState({});
+  const [recentCadets, setRecentCadets] = useState([]);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const { user: admin, logout } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch("http://localhost:5000/api/admin/stats")
+      .then(res => res.json())
+      .then(data => setStats(data))
+      .catch(err => console.error("Failed to fetch stats:", err));
+
+    fetch("http://localhost:5000/api/users/cadets")
+      .then(res => res.json())
+      .then(data => setRecentCadets(data.slice(0, 3))) // latest 3
+      .catch(err => console.error("Failed to fetch cadets:", err));
+
+    fetch("http://localhost:5000/api/events/upcoming")
+      .then(res => res.json())
+      .then(data => setUpcomingEvents(data))
+      .catch(err => console.error("Failed to fetch events:", err));
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/");
+  };
+
   return (
     <div className="flex font-sans bg-gray-100 min-h-screen">
       {/* Sidebar */}
@@ -15,56 +45,59 @@ export default function AdminDashboard() {
             Admin Portal
           </div>
           <div className="bg-green-50 mx-5 p-4 rounded-lg text-left">
-            <h4 className="text-base font-semibold">Major Sharma</h4>
-            <p className="text-sm text-gray-500">Commanding Officer</p>
+            <h4 className="text-base font-semibold">{admin?.name || "Admin"}</h4>
+            <p className="text-sm text-gray-500">{admin?.rank || "Commanding Officer"}</p>
           </div>
           <nav className="mt-5">
-  <Link to="/admin" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium bg-orange-400 text-white">
-    Dashboard
-  </Link>
-  <Link to="/cadet-management" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
-    Manage Cadets
-  </Link>
-  <Link to="/admin/manage-events" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
-    Manage Events
-  </Link>
-  <Link to="/upload-drill" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
-    Drill Videos
-  </Link>
-  <Link to="/admin/attendance" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
-    Attendance
-  </Link>
-  <Link to="/admin/reports" className="flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium text-gray-800 hover:bg-orange-100">
-    Reports
-  </Link>
-</nav>
+            {[
+              { label: "Dashboard", to: "/admin", active: true },
+              { label: "Manage Cadets", to: "/cadet-management" },
+              { label: "Manage Events", to: "/update-event" },
+              { label: "Drill Videos", to: "/upload-drill" },
+              { label: "Attendance", to: "/attendance" },
+              { label: "Query Box", to: "/query-box" }
+            ].map((item, idx) => (
+              <Link
+                key={idx}
+                to={item.to}
+                className={`flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium ${item.active ? "bg-orange-400 text-white" : "text-gray-800 hover:bg-orange-100"
+                  }`}
+              >
 
+                {item.label}
+              </Link>
+            ))}
+          </nav>
         </div>
         <div className="p-4 border-t border-gray-300">
-          <Link to="/" className="text-red-600 font-bold hover:underline">
+          <button
+            onClick={handleLogout}
+            className="text-red-600 font-bold hover:underline"
+          >
             ↩︎ Logout
-          </Link>
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
       <main className="flex-1 p-6 overflow-y-auto">
         <h2 className="text-2xl font-semibold mb-6">Dashboard</h2>
-        
+
         {/* Stat Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-6">
+        {/* Stat Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5 mb-6">
           {[
-            { label: "Total Cadets", value: "245" },
-            { label: "Active Events", value: "12" },
-            { label: "Avg Attendance", value: "89%" },
-            { label: "On Leave", value: "1" },
+            { label: "Total Cadets", value: stats.totalCadets },
+            { label: "Active Events", value: stats.activeEvents }
           ].map((stat, idx) => (
             <div key={idx} className="bg-white p-5 rounded-xl shadow text-center">
               <p className="text-sm text-gray-500">{stat.label}</p>
-              <h3 className="text-2xl font-bold mt-2">{stat.value}</h3>
+              <h3 className="text-2xl font-bold mt-2">{stat.value ?? "—"}</h3>
             </div>
           ))}
         </div>
+
+
 
         {/* Comment Box */}
         <div className="bg-white p-5 rounded-xl shadow mb-6">
@@ -82,11 +115,13 @@ export default function AdminDashboard() {
           <div className="bg-white p-5 rounded-xl shadow">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Recent Cadets</h3>
-              <button className="bg-green-600 text-white px-3 py-1 rounded text-sm">View All</button>
+              <Link to="/cadet-management" className="bg-green-600 text-white px-3 py-1 rounded text-sm">
+                View All
+              </Link>
             </div>
-            {["Raj Kumar", "Priya Singh", "Arjun Patel"].map((name, idx) => (
+            {recentCadets.map((cadet, idx) => (
               <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
-                <span>Cadet {name}</span>
+                <span>Cadet {cadet.name || cadet.regno}</span>
                 <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">Active</span>
               </div>
             ))}
@@ -96,13 +131,11 @@ export default function AdminDashboard() {
           <div className="bg-white p-5 rounded-xl shadow">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold">Upcoming Events</h3>
-              <button className="bg-green-600 text-white px-3 py-1 rounded text-sm">Manage All</button>
+              <Link to="/update-event" className="bg-green-600 text-white px-3 py-1 rounded text-sm">
+                Manage All
+              </Link>
             </div>
-            {[
-              { title: "Annual Drill Competition", status: "Upcoming" },
-              { title: "Weapon Training Session", status: "Upcoming" },
-              { title: "Republic Day Parade Prep", status: "Planning" },
-            ].map((event, idx) => (
+            {upcomingEvents.map((event, idx) => (
               <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
                 <span>{event.title}</span>
                 <span className="bg-green-600 text-white px-2 py-1 rounded text-xs">{event.status}</span>

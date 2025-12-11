@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { setToken } from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 import soldiers1 from "../image/soldiers1.jpg";
 import soldiers2 from "../image/soldiers2.jpg";
 import soldiers3 from "../image/soldiers3.jpg";
@@ -27,7 +29,9 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { refreshUser } = useAuth();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -39,9 +43,11 @@ export default function AdminLogin() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
+    setIsLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      // Admin login uses email
+      const res = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -54,16 +60,18 @@ export default function AdminLogin() {
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("role", data.role);
+      setToken(data.token);
+      await refreshUser();
 
       if (data.role === "admin") {
-        navigate("/admin-dashboard");
+        navigate("/admin/dashboard");
       } else {
         setError("Access denied: not an admin");
       }
     } catch (err) {
       setError("Server error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,9 +82,8 @@ export default function AdminLogin() {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute top-0 w-full h-full flex flex-col justify-center items-center text-center px-5 transition-all duration-700 ${
-              index === currentSlide ? "left-0" : index < currentSlide ? "-left-full" : "left-full"
-            }`}
+            className={`absolute top-0 w-full h-full flex flex-col justify-center items-center text-center px-5 transition-all duration-700 ${index === currentSlide ? "left-0" : index < currentSlide ? "-left-full" : "left-full"
+              }`}
             style={{
               backgroundImage: `url(${slide.image})`,
               backgroundSize: "cover",
@@ -97,9 +104,8 @@ export default function AdminLogin() {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-2.5 h-2.5 rounded-full bg-white transition-opacity ${
-                index === currentSlide ? "opacity-100" : "opacity-50"
-              }`}
+              className={`w-2.5 h-2.5 rounded-full bg-white transition-opacity ${index === currentSlide ? "opacity-100" : "opacity-50"
+                }`}
             />
           ))}
         </div>

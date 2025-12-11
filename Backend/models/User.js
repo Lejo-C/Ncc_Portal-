@@ -40,10 +40,34 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-    name: { type: String, trim: true },
-  rank: { type: String, trim: true },
-  phone: { type: String, trim: true },
-  createdAt: { type: Date, default: Date.now }
+  bankAccount: {
+  type: String,
+  trim: true
+},
+ifsc: {
+  type: String,
+  trim: true
+},
+dob: {
+  type: Date
+},
+fatherName: {
+  type: String,
+  trim: true
+},
+motherName: {
+  type: String,
+  trim: true
+},
+address: {
+  type: String,
+  trim: true
+},
+isEmailVerified: {
+  type: Boolean,
+  default: false
+}
+
 });
 
 module.exports = mongoose.model("User", UserSchema);
