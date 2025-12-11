@@ -9,7 +9,6 @@ connectDB();
 
 const app = express();
 
-// CORS
 app.use(
   cors({
     origin:
@@ -22,7 +21,7 @@ app.use(
 
 app.use(express.json());
 
-// Routes
+// API routes
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/events", require("./routes/events"));
 app.use("/api/upload", require("./routes/upload"));
