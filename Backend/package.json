@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm install --prefix ../Frontend",
     "build": "npm run build --prefix ../Frontend",
-    "start": "node server.js",
+    "start": "npm run build && node server.js",
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "prod": "npm run build && node server.js"
   },
