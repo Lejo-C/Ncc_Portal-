@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminDashboard() {
   const [stats, setStats] = useState({});
   const [recentCadets, setRecentCadets] = useState([]);
@@ -10,17 +12,17 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/admin/stats")
+    fetch(`${API_URL}/api/admin/stats`)
       .then(res => res.json())
       .then(data => setStats(data))
       .catch(err => console.error("Failed to fetch stats:", err));
 
-    fetch("http://localhost:5000/api/users/cadets")
+    fetch(`${API_URL}/api/users/cadets`)
       .then(res => res.json())
       .then(data => setRecentCadets(data.slice(0, 3))) // latest 3
       .catch(err => console.error("Failed to fetch cadets:", err));
 
-    fetch("http://localhost:5000/api/events/upcoming")
+    fetch(`${API_URL}/api/events/upcoming`)
       .then(res => res.json())
       .then(data => setUpcomingEvents(data))
       .catch(err => console.error("Failed to fetch events:", err));
@@ -74,7 +76,7 @@ export default function AdminDashboard() {
             onClick={handleLogout}
             className="text-red-600 font-bold hover:underline"
           >
-            ↩︎ Logout
+            Ã¢â€ Â©Ã¯Â¸Å½ Logout
           </button>
         </div>
       </aside>
@@ -92,7 +94,7 @@ export default function AdminDashboard() {
           ].map((stat, idx) => (
             <div key={idx} className="bg-white p-5 rounded-xl shadow text-center">
               <p className="text-sm text-gray-500">{stat.label}</p>
-              <h3 className="text-2xl font-bold mt-2">{stat.value ?? "—"}</h3>
+              <h3 className="text-2xl font-bold mt-2">{stat.value ?? "Ã¢â‚¬â€"}</h3>
             </div>
           ))}
         </div>

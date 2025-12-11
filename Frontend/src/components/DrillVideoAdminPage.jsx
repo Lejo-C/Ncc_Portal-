@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function DrillVideoAdminPage() {
   const [videos, setVideos] = useState([]);
   const [showModal, setShowModal] = useState(false);
@@ -10,17 +12,17 @@ export default function DrillVideoAdminPage() {
   const totalViews = videos.reduce((sum, v) => sum + v.views, 0);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/drill-videos")
+    fetch(`${API_URL}/api/drill-videos`)
       .then(res => res.json())
       .then(data => setVideos(data));
   }, []);
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/api/drill-videos/${id}`, {
+    await fetch(`${API_URL}/api/drill-videos/${id}`, {
       method: "DELETE",
     });
 
-    const updated = await fetch("http://localhost:5000/api/drill-videos").then(res => res.json());
+    const updated = await fetch(`${API_URL}/api/drill-videos`).then(res => res.json());
     setVideos(updated);
   };
 
@@ -39,7 +41,7 @@ export default function DrillVideoAdminPage() {
     const form = new FormData();
     form.append("file", formData.file);
 
-    const uploadRes = await fetch("http://localhost:5000/api/upload", {
+    const uploadRes = await fetch(`${API_URL}/api/upload`, {
       method: "POST",
       body: form,
     });
@@ -47,13 +49,13 @@ export default function DrillVideoAdminPage() {
     const { videoUrl } = await uploadRes.json();
 
     // Save metadata to MongoDB
-    await fetch("http://localhost:5000/api/drill-videos/upload", {
+    await fetch(`${API_URL}/api/drill-videos/upload`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: formData.title, videoUrl }),
     });
 
-    const updated = await fetch("http://localhost:5000/api/drill-videos").then(res => res.json());
+    const updated = await fetch(`${API_URL}/api/drill-videos`).then(res => res.json());
     setVideos(updated);
 
     setFormData({ title: "", file: null });
@@ -64,7 +66,7 @@ export default function DrillVideoAdminPage() {
     <div className="min-h-screen bg-gray-50 p-6 font-sans relative">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-orange-700">📤 Drill Video Management</h1>
+          <h1 className="text-2xl font-bold text-orange-700">ðŸ“¤ Drill Video Management</h1>
           <p className="text-sm text-gray-600">Manage uploaded videos and add new training content</p>
         </div>
         <button
@@ -93,7 +95,7 @@ export default function DrillVideoAdminPage() {
           <div key={idx} className="bg-white rounded-xl shadow p-4 border border-gray-200">
             <video controls src={video.videoUrl} className="w-full h-40 object-cover rounded-md mb-3" />
             <h3 className="text-lg font-semibold text-gray-800">{video.title}</h3>
-            <div className="text-sm text-gray-500">👁️ {video.views} views</div>
+            <div className="text-sm text-gray-500">ðŸ‘ï¸ {video.views} views</div>
 
             <button
   onClick={() => setActiveVideo(video.videoUrl)}
@@ -124,7 +126,7 @@ export default function DrillVideoAdminPage() {
         onClick={() => setActiveVideo(null)}
         className="absolute top-2 right-2 text-red-600 font-bold text-xl"
       >
-        ×
+        Ã—
       </button>
       <video
         src={activeVideo}

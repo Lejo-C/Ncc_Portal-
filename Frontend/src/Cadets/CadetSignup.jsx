@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function CadetSignup() {
     const [formData, setFormData] = useState({
         regno: "",
@@ -35,7 +37,7 @@ export default function CadetSignup() {
         setIsLoading(true);
 
         try {
-            const res = await fetch("http://localhost:5000/api/users/register", {
+            const res = await fetch(`${API_URL}/api/users/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
@@ -51,7 +53,7 @@ export default function CadetSignup() {
             const data = await res.json();
 
             if (res.ok) {
-                alert("✅ Registration successful! Please login with your credentials.");
+                alert("âœ… Registration successful! Please login with your credentials.");
                 navigate("/cdt-login");
             } else {
                 setError(data.message || "Registration failed");
@@ -193,7 +195,7 @@ export default function CadetSignup() {
 
                 <div className="mt-4 text-center">
                     <Link to="/" className="text-xs text-gray-500 hover:underline">
-                        ← Back to home
+                        â† Back to home
                     </Link>
                 </div>
             </div>

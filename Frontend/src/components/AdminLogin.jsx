@@ -6,6 +6,8 @@ import soldiers1 from "../image/soldiers1.jpg";
 import soldiers2 from "../image/soldiers2.jpg";
 import soldiers3 from "../image/soldiers3.jpg";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 const slides = [
   {
     image: soldiers1,
@@ -47,7 +49,7 @@ export default function AdminLogin() {
 
     try {
       // Admin login uses email
-      const res = await fetch("http://localhost:5000/api/users/login", {
+      const res = await fetch(`${API_URL}/api/users/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -117,7 +119,7 @@ export default function AdminLogin() {
           <h2 className="text-center text-2xl font-semibold mb-2">Administrator Login</h2>
           <p className="text-center text-gray-600 mb-5">Sign in to access your NCC admin portal</p>
 
-          <a href="/" className="text-sm text-gray-700 hover:underline block mb-4">← Back to user selection</a>
+          <a href="/" className="text-sm text-gray-700 hover:underline block mb-4">â† Back to user selection</a>
 
           <form onSubmit={handleLogin}>
             <div className="mb-4">
@@ -160,12 +162,12 @@ export default function AdminLogin() {
           </form>
 
           <div className="text-center text-sm text-gray-600 mt-4">
-            Don’t have an account?{" "}
+            Donâ€™t have an account?{" "}
             <a href="#" className="text-green-600 font-bold hover:underline">Contact your administrator</a>
           </div>
 
           <div className="text-center text-xs text-gray-500 mt-5">
-            By signing in, you agree to NCC’s{" "}
+            By signing in, you agree to NCCâ€™s{" "}
             <a href="#" className="text-green-600 hover:underline">Terms of Service</a> and{" "}
             <a href="#" className="text-green-600 hover:underline">Privacy Policy</a>
           </div>

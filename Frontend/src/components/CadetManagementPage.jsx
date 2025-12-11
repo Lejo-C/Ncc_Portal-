@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function CadetManagementPage() {
   const [cadets, setCadets] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
@@ -12,7 +14,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/cadets")
+    fetch(`${API_URL}/api/users/cadets`)
       .then(res => res.json())
       .then(data => setCadets(data));
   }, []);
@@ -21,11 +23,11 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     const confirm = window.confirm("Are you sure you want to delete this cadet?");
     if (!confirm) return;
 
-    await fetch(`http://localhost:5000/api/users/delete/${id}`, {
+    await fetch(`${API_URL}/api/users/delete/${id}`, {
       method: "DELETE"
     });
 
-    const updated = await fetch("http://localhost:5000/api/users/cadets").then(res => res.json());
+    const updated = await fetch(`${API_URL}/api/users/cadets`).then(res => res.json());
     setCadets(updated);
   };
 
@@ -38,7 +40,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
       return;
     }
 
-    await fetch("http://localhost:5000/api/users/register", {
+    await fetch(`${API_URL}/api/users/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -49,7 +51,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
       })
     });
 
-    const updated = await fetch("http://localhost:5000/api/users/cadets").then(res => res.json());
+    const updated = await fetch(`${API_URL}/api/users/cadets`).then(res => res.json());
     setCadets(updated);
     setNewCadet({ regno: "", name: "", password: "" });
     setShowCreateModal(false);
@@ -58,12 +60,12 @@ const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleRankSubmit = async (e) => {
     e.preventDefault();
-    await fetch(`http://localhost:5000/api/users/update-rank/${rankForm.id}`, {
+    await fetch(`${API_URL}/api/users/update-rank/${rankForm.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ rank: rankForm.rank })
     });
-    const updated = await fetch("http://localhost:5000/api/users/cadets").then(res => res.json());
+    const updated = await fetch(`${API_URL}/api/users/cadets`).then(res => res.json());
     setCadets(updated);
     setShowRankModal(false);
   };
@@ -72,7 +74,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-orange-700">🧑‍✈️ Registered Cadets</h1>
+          <h1 className="text-2xl font-bold text-orange-700">ðŸ§‘â€âœˆï¸ Registered Cadets</h1>
           <p className="text-sm text-gray-600">List of all cadets who have registered in the portal</p>
         </div>
         <button
@@ -99,13 +101,13 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           <tbody className="text-sm text-gray-700">
             {cadets.map((cadet, idx) => (
   <tr key={idx} className="border-t border-gray-200 hover:bg-orange-50">
-    <td className="px-4 py-3">{cadet.regno || "—"}</td>
-    <td className="px-4 py-3">{cadet.name || "—"}</td>
-    <td className="px-4 py-3">{cadet.rank || "—"}</td>
-    <td className="px-4 py-3">{cadet.email || "—"}</td>
-    <td className="px-4 py-3">{cadet.phone || "—"}</td>
+    <td className="px-4 py-3">{cadet.regno || "â€”"}</td>
+    <td className="px-4 py-3">{cadet.name || "â€”"}</td>
+    <td className="px-4 py-3">{cadet.rank || "â€”"}</td>
+    <td className="px-4 py-3">{cadet.email || "â€”"}</td>
+    <td className="px-4 py-3">{cadet.phone || "â€”"}</td>
     <td className="px-4 py-3">
-      {cadet.createdAt ? new Date(cadet.createdAt).toLocaleDateString() : "—"}
+      {cadet.createdAt ? new Date(cadet.createdAt).toLocaleDateString() : "â€”"}
     </td>
     <td className="px-4 py-3 flex flex-wrap gap-2">
       <button
@@ -249,7 +251,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
         <div><strong>Phone:</strong> {selectedCadet.phone}</div>
         <div><strong>Bank Account:</strong> {selectedCadet.bankAccount}</div>
         <div><strong>IFSC Code:</strong> {selectedCadet.ifsc}</div>
-        <div><strong>DOB:</strong> {selectedCadet.dob ? new Date(selectedCadet.dob).toLocaleDateString() : "—"}</div>
+        <div><strong>DOB:</strong> {selectedCadet.dob ? new Date(selectedCadet.dob).toLocaleDateString() : "â€”"}</div>
         <div><strong>Father's Name:</strong> {selectedCadet.fatherName}</div>
         <div><strong>Mother's Name:</strong> {selectedCadet.motherName}</div>
         <div className="sm:col-span-2"><strong>Address:</strong> {selectedCadet.address}</div>

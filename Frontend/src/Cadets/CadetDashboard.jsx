@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { updateProfile } from "../utils/api";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function CadetDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
   const [contactForm, setContactForm] = useState({
@@ -54,17 +56,17 @@ export default function CadetDashboard() {
       setShowContactModal(true);
     }
 
-    fetch(`http://localhost:5000/api/attendance/cadet/${cadet._id}`)
+    fetch(`${API_URL}/api/attendance/cadet/${cadet._id}`)
       .then(res => res.json())
       .then(data => setAttendance(data))
       .catch(err => console.error("Failed to fetch attendance:", err));
 
-    fetch("http://localhost:5000/api/events/upcoming")
+    fetch(`${API_URL}/api/events/upcoming`)
       .then(res => res.json())
       .then(data => setEvents(data))
       .catch(err => console.error("Failed to fetch events:", err));
 
-    fetch("http://localhost:5000/api/videos")
+    fetch(`${API_URL}/api/videos`)
       .then(res => res.json())
       .then(data => setVideos(data))
       .catch(err => console.error("Failed to fetch videos:", err));
@@ -115,29 +117,29 @@ export default function CadetDashboard() {
             </div>
             <div>
               <div className="font-semibold">{cadet?.name || "Cadet"}</div>
-              <div className="text-xs text-gray-500">{cadet?.rank || "—"}</div>
+              <div className="text-xs text-gray-500">{cadet?.rank || "â€”"}</div>
             </div>
           </div>
         </div>
 
         <nav className="flex flex-col gap-2 text-sm font-medium">
           <Link to="#" className="flex items-center gap-2 px-3 py-2 rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition">
-            🏠 Dashboard
+            ðŸ  Dashboard
           </Link>
           <Link to="/cdt-attendance" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            ✔️ Attendance
+            âœ”ï¸ Attendance
           </Link>
           <Link to="/drill-videos" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            🎥 Drill Videos
+            ðŸŽ¥ Drill Videos
           </Link>
           <Link to="/query-box" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            💡 QueryBox
+            ðŸ’¡ QueryBox
           </Link>
           <Link to="/events" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            📅 Events
+            ðŸ“… Events
           </Link>
           <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            👤 Profile
+            ðŸ‘¤ Profile
           </Link>
         </nav>
 
@@ -146,21 +148,21 @@ export default function CadetDashboard() {
             onClick={handleLogout}
             className="flex items-center gap-2 text-red-600 px-3 py-2 rounded-md hover:bg-red-50 transition w-full"
           >
-            ↩︎ Logout
+            â†©ï¸Ž Logout
           </button>
         </div>
       </aside>
 
       {/* Main Dashboard Content */}
       <main className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-2xl font-bold text-blue-700 mb-6">🎖️ Welcome, {cadet?.name || "Cadet"}</h2>
+        <h2 className="text-2xl font-bold text-blue-700 mb-6">ðŸŽ–ï¸ Welcome, {cadet?.name || "Cadet"}</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-4 rounded-xl shadow text-center">
             <p className="text-sm text-gray-500">Attendance</p>
             <h3 className="text-2xl font-bold text-green-600">
-              {attendance?.percentage ?? "—"}%
+              {attendance?.percentage ?? "â€”"}%
             </h3>
           </div>
           <div className="bg-white p-4 rounded-xl shadow text-center">
@@ -175,13 +177,13 @@ export default function CadetDashboard() {
 
         {/* Upcoming Events */}
         <div className="bg-white p-5 rounded-xl shadow mb-6">
-          <h3 className="text-lg font-semibold mb-3">📅 Upcoming Events</h3>
+          <h3 className="text-lg font-semibold mb-3">ðŸ“… Upcoming Events</h3>
           {events.map((event, idx) => (
             <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
               <div>
                 <p className="font-semibold">{event.title}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(event.date).toLocaleDateString()} at {event.time} — {event.location}
+                  {new Date(event.date).toLocaleDateString()} at {event.time} â€” {event.location}
                 </p>
               </div>
               <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">
@@ -193,12 +195,12 @@ export default function CadetDashboard() {
 
         {/* Training Videos */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-3">🎥 Recent Training Videos</h3>
+          <h3 className="text-lg font-semibold mb-3">ðŸŽ¥ Recent Training Videos</h3>
           {videos.map((video, idx) => (
             <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
               <div>
                 <p className="font-semibold">{video.title}</p>
-                <p className="text-sm text-gray-500">{video.level} • {video.duration}</p>
+                <p className="text-sm text-gray-500">{video.level} â€¢ {video.duration}</p>
               </div>
               <button className="bg-orange-500 text-white px-3 py-1 rounded text-sm hover:bg-orange-600">
                 Watch

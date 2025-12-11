@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function CadetQueryBox() {
   const [queries, setQueries] = useState([]);
   const [search, setSearch] = useState("");
@@ -20,7 +22,7 @@ export default function CadetQueryBox() {
 
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/query")
+    fetch(`${API_URL}/api/query`)
       .then(res => res.json())
       .then(data => setQueries(data));
   }, []);
@@ -40,7 +42,7 @@ export default function CadetQueryBox() {
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-green-700">💡 Doubts & Q&A</h1>
+        <h1 className="text-2xl font-bold text-green-700">ðŸ’¡ Doubts & Q&A</h1>
         <button
           onClick={() => setShowModal(true)}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
@@ -99,7 +101,7 @@ export default function CadetQueryBox() {
           </div>
           <div className="text-xs text-gray-500 flex justify-between">
             <span>Posted by: {q.postedBy.name} ({q.postedBy.role})</span>
-            <span>👁️ {q.views} views • 💬 {q.answers.length} answers</span>
+            <span>ðŸ‘ï¸ {q.views} views â€¢ ðŸ’¬ {q.answers.length} answers</span>
             <button
               onClick={() => {
                 setActiveQueryId(q._id);
@@ -107,7 +109,7 @@ export default function CadetQueryBox() {
               }}
               className="mt-2 px-4 py-1 bg-blue-600 text-white rounded text-sm hover:bg-blue-700"
             >
-              💬 Reply
+              ðŸ’¬ Reply
             </button>
 
           </div>
@@ -122,7 +124,7 @@ export default function CadetQueryBox() {
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
             >
-              ✕
+              âœ•
             </button>
 
             <form
@@ -141,7 +143,7 @@ export default function CadetQueryBox() {
                   answers: []
                 };
 
-                const res = await fetch("http://localhost:5000/api/query", {
+                const res = await fetch(`${API_URL}/api/query`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(payload)
@@ -195,13 +197,13 @@ export default function CadetQueryBox() {
               onClick={() => setShowReplyModal(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
             >
-              ✕
+              âœ•
             </button>
 
             <form
               onSubmit={async (e) => {
                 e.preventDefault();
-                const res = await fetch(`http://localhost:5000/api/query/answer/${activeQueryId}`, {
+                const res = await fetch(`${API_URL}/api/query/answer/${activeQueryId}`, {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({

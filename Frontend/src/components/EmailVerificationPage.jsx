@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function EmailVerificationPage() {
   const { token } = useParams();
   const [status, setStatus] = useState("Verifying...");
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/users/verify-email/${token}`)
+    fetch(`${API_URL}/api/users/verify-email/${token}`)
       .then(res => res.text())
       .then(msg => setStatus(msg))
-      .catch(() => setStatus("❌ Verification failed. Try again or contact support."));
+      .catch(() => setStatus("âŒ Verification failed. Try again or contact support."));
   }, [token]);
 
   return (

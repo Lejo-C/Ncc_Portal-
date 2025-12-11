@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminEventUpdatePage() {
   const [events, setEvents] = useState([]);
   const navigate = useNavigate();
@@ -19,15 +21,15 @@ const [editEvent, setEditEvent] = useState(null);
 
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events")
+    fetch(`${API_URL}/api/events`)
       .then(res => res.json())
       .then(data => setEvents(Array.isArray(data) ? data : []))
-      .catch(err => console.error("❌ Failed to fetch events:", err));
+      .catch(err => console.error("âŒ Failed to fetch events:", err));
   }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this event?")) return;
-    await fetch(`http://localhost:5000/api/events/${id}`, {
+    await fetch(`${API_URL}/api/events/${id}`, {
       method: "DELETE"
     });
     setEvents(prev => prev.filter(event => event._id !== id));
@@ -44,7 +46,7 @@ const [editEvent, setEditEvent] = useState(null);
       isNaN(Number(newEvent.participants)) ||
       Number(newEvent.participants) < 0
     ) {
-      alert("❌ Please fill all required fields correctly.");
+      alert("âŒ Please fill all required fields correctly.");
       return;
     }
 
@@ -54,7 +56,7 @@ const [editEvent, setEditEvent] = useState(null);
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/events", {
+      const res = await fetch(`${API_URL}/api/events`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -62,7 +64,7 @@ const [editEvent, setEditEvent] = useState(null);
 
       if (!res.ok) {
         const errorData = await res.json();
-        alert("❌ Failed to create event: " + (errorData.message || "Check required fields."));
+        alert("âŒ Failed to create event: " + (errorData.message || "Check required fields."));
         return;
       }
 
@@ -80,7 +82,7 @@ const [editEvent, setEditEvent] = useState(null);
               });
             }
           } catch (err) {
-            alert("❌ Error creating event.");
+            alert("âŒ Error creating event.");
           }
         };
       
@@ -120,7 +122,7 @@ const [editEvent, setEditEvent] = useState(null);
   }}
   className="px-3 py-1 bg-blue-500 text-white rounded text-sm hover:bg-blue-600"
 >
-  ✏️ Edit
+  âœï¸ Edit
 </button>
 
 
@@ -128,15 +130,15 @@ const [editEvent, setEditEvent] = useState(null);
                             onClick={() => handleDelete(event._id)}
                             className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
                           >
-                            🗑️ Delete
+                            ðŸ—‘ï¸ Delete
                           </button>
                         </div>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-sm text-gray-700">
                         <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
-                        <p><strong>Time:</strong> {event.time || "—"}</p>
-                        <p><strong>Location:</strong> {event.location || "—"}</p>
-                        <p><strong>Participants:</strong> {event.participants || "—"}</p>
+                        <p><strong>Time:</strong> {event.time || "â€”"}</p>
+                        <p><strong>Location:</strong> {event.location || "â€”"}</p>
+                        <p><strong>Participants:</strong> {event.participants || "â€”"}</p>
                         <p><strong>Status:</strong>
                           <span className={`ml-1 px-2 py-1 rounded text-xs font-semibold ${
                             event.status === "Upcoming" ? "bg-green-600 text-white" :
@@ -160,7 +162,7 @@ const [editEvent, setEditEvent] = useState(null);
                     onClick={() => setShowModal(false)}
                     className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
                   >
-                    ✕
+                    âœ•
                   </button>
       
                   <form onSubmit={handleCreate} className="grid gap-4">
@@ -226,7 +228,7 @@ const [editEvent, setEditEvent] = useState(null);
         onClick={() => setShowEditModal(false)}
         className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
       >
-        ✕
+        âœ•
       </button>
 
       <form
@@ -237,7 +239,7 @@ const [editEvent, setEditEvent] = useState(null);
             participants: editEvent.participants ? Number(editEvent.participants) : 0
           };
 
-          const res = await fetch(`http://localhost:5000/api/events/${editEvent._id}`, {
+          const res = await fetch(`${API_URL}/api/events/${editEvent._id}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
@@ -251,7 +253,7 @@ const [editEvent, setEditEvent] = useState(null);
             setShowEditModal(false);
             setEditEvent(null);
           } else {
-            alert("❌ Failed to update event.");
+            alert("âŒ Failed to update event.");
           }
         }}
         className="grid gap-4"

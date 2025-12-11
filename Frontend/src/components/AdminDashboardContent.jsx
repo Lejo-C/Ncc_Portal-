@@ -1,23 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminDashboardContent() {
     const [stats, setStats] = useState({});
     const [recentCadets, setRecentCadets] = useState([]);
     const [upcomingEvents, setUpcomingEvents] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:5000/api/admin/stats")
+        fetch(`${API_URL}/api/admin/stats`)
             .then(res => res.json())
             .then(data => setStats(data))
             .catch(err => console.error("Failed to fetch stats:", err));
 
-        fetch("http://localhost:5000/api/users/cadets")
+        fetch(`${API_URL}/api/users/cadets`)
             .then(res => res.json())
             .then(data => setRecentCadets(data.slice(0, 3)))
             .catch(err => console.error("Failed to fetch cadets:", err));
 
-        fetch("http://localhost:5000/api/events/upcoming")
+        fetch(`${API_URL}/api/events/upcoming`)
             .then(res => res.json())
             .then(data => setUpcomingEvents(data))
             .catch(err => console.error("Failed to fetch events:", err));
@@ -35,7 +37,7 @@ export default function AdminDashboardContent() {
                 ].map((stat, idx) => (
                     <div key={idx} className="bg-white p-4 sm:p-5 rounded-xl shadow text-center">
                         <p className="text-sm text-gray-500">{stat.label}</p>
-                        <h3 className="text-xl sm:text-2xl font-bold mt-2">{stat.value ?? "—"}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold mt-2">{stat.value ?? "â€”"}</h3>
                     </div>
                 ))}
             </div>

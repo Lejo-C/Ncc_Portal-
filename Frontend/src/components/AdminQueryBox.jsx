@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminQueryBox() {
   const [queries, setQueries] = useState([]);
   const [replyText, setReplyText] = useState("");
   const [activeQueryId, setActiveQueryId] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/query")
+    fetch(`${API_URL}/api/query`)
       .then(res => res.json())
       .then(data => setQueries(data));
   }, []);
@@ -14,7 +16,7 @@ export default function AdminQueryBox() {
 
   
   const handleReply = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/query/answer/${id}`, {
+    const res = await fetch(`${API_URL}/api/query/answer/${id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -31,7 +33,7 @@ export default function AdminQueryBox() {
   };
 
   const markAsSolved = async (id) => {
-    const res = await fetch(`http://localhost:5000/api/query/solve/${id}`, {
+    const res = await fetch(`${API_URL}/api/query/solve/${id}`, {
       method: "PUT"
     });
     const data = await res.json();
@@ -42,7 +44,7 @@ export default function AdminQueryBox() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <h1 className="text-2xl font-bold text-blue-700 mb-6">🛠️ Admin QueryBox</h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-6">ðŸ› ï¸ Admin QueryBox</h1>
 
       {queries.map((q, idx) => (
         <div key={idx} className="bg-white p-5 rounded-xl shadow mb-4">
@@ -61,7 +63,7 @@ export default function AdminQueryBox() {
             ))}
           </div>
           <p className="text-xs text-gray-500 mb-2">Posted by: {q.postedBy.name} ({q.postedBy.role})</p>
-          <p className="text-xs text-gray-500 mb-2">👁️ {q.views} views • 💬 {q.answers.length} answers</p>
+          <p className="text-xs text-gray-500 mb-2">ðŸ‘ï¸ {q.views} views â€¢ ðŸ’¬ {q.answers.length} answers</p>
 
           {/* Existing Answers */}
           {q.answers.map((ans, i) => (

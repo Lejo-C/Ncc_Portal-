@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export default function AdminAttendancePage() {
   const [cadets, setCadets] = useState([]);
   const [attendance, setAttendance] = useState({});
@@ -10,7 +12,7 @@ export default function AdminAttendancePage() {
   const [selectedRecord, setSelectedRecord] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users/cadets")
+    fetch(`${API_URL}/api/users/cadets`)
       .then(res => res.json())
       .then(data => {
         setCadets(data);
@@ -39,13 +41,13 @@ export default function AdminAttendancePage() {
       records: Object.entries(attendance).map(([cadetId, present]) => ({ cadetId, present }))
     };
 
-    await fetch("http://localhost:5000/api/attendance", {
+    await fetch(`${API_URL}/api/attendance`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
     });
 
-    alert("✅ Attendance submitted!");
+    alert("âœ… Attendance submitted!");
   };
 
   const markAll = (value) => {
@@ -55,7 +57,7 @@ export default function AdminAttendancePage() {
   };
 
   const fetchHistory = async () => {
-    const res = await fetch("http://localhost:5000/api/attendance");
+    const res = await fetch(`${API_URL}/api/attendance`);
     const data = await res.json();
     setAttendanceHistory(data);
     setShowHistoryModal(true);
@@ -64,7 +66,7 @@ export default function AdminAttendancePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <h1 className="text-2xl font-bold text-blue-700 mb-4">📋 Attendance Management</h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-4">ðŸ“‹ Attendance Management</h1>
 
       {/* Overall Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -86,7 +88,7 @@ export default function AdminAttendancePage() {
         onClick={fetchHistory}
         className="mb-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
       >
-        📅 View Previous Attendance
+        ðŸ“… View Previous Attendance
       </button>
 
       {/* Mark Attendance Form */}
@@ -147,7 +149,7 @@ export default function AdminAttendancePage() {
                     </span>
                     {cadet.name}
                   </td>
-                  <td className="px-4 py-3">{cadet.unit || "—"}</td>
+                  <td className="px-4 py-3">{cadet.unit || "â€”"}</td>
                   <td className="px-4 py-3">
                     <span className={`px-2 py-1 rounded text-xs font-semibold ${
                       attendance[cadet._id] ? "bg-green-600 text-white" : "bg-red-600 text-white"
@@ -184,7 +186,7 @@ export default function AdminAttendancePage() {
               onClick={() => setShowHistoryModal(false)}
               className="absolute top-3 right-4 text-gray-500 hover:text-black text-lg"
             >
-              ✕
+              âœ•
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
@@ -195,7 +197,7 @@ export default function AdminAttendancePage() {
                   className="bg-gray-100 hover:bg-purple-100 p-3 rounded-lg text-left border"
                 >
                   <h3 className="font-semibold text-gray-800">
-                    {new Date(record.date).toLocaleDateString()} — {record.type.toUpperCase()}
+                    {new Date(record.date).toLocaleDateString()} â€” {record.type.toUpperCase()}
                   </h3>
                   <p className="text-sm text-gray-500">
                     {record.records.filter(r => r.present).length} Present
@@ -212,7 +214,7 @@ export default function AdminAttendancePage() {
 
     {/* Present Cadets */}
     <div className="mb-4">
-      <h4 className="text-sm font-semibold text-green-700 mb-1">✅ Present Cadets:</h4>
+      <h4 className="text-sm font-semibold text-green-700 mb-1">âœ… Present Cadets:</h4>
       <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
         {selectedRecord.records
           .filter(r => r.present)
@@ -224,7 +226,7 @@ export default function AdminAttendancePage() {
 
     {/* Absent Cadets */}
     <div>
-      <h4 className="text-sm font-semibold text-red-700 mb-1">❌ Absent Cadets:</h4>
+      <h4 className="text-sm font-semibold text-red-700 mb-1">âŒ Absent Cadets:</h4>
       <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
         {selectedRecord.records
           .filter(r => !r.present)
