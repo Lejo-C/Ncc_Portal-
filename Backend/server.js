@@ -3,81 +3,46 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
 const connectDB = require("./config/db");
-const { fileURLToPath } = require("url");
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-app.use(express.static(path.join(__dirname, "dist")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "dist", "index.html"));
-});
-
-
-const drillVideoRoutes = require("./routes/drillVideo");
-const uploadRoute = require("./routes/upload");
-const authRoutes = require("./routes/auth");
-const eventRoutes = require("./routes/events");
-const adminRoutes = require("./routes/admin");
-const attendanceRoutes = require("./routes/attendance");
-const queryRoutes = require("./routes/query");
-
-// Check if all route modules are functions (Express routers)
-if (
-  typeof drillVideoRoutes !== "function" ||
-  typeof uploadRoute !== "function" ||
-  typeof authRoutes !== "function" ||
-  typeof eventRoutes !== "function"
-) {
-  throw new Error(
-    "One or more route modules are not exporting an Express router. Please check your route files."
-  );
-}
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
-// CORS configuration
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || true
-    : 'http://localhost:5173',
-  credentials: true
-};
-app.use(cors(corsOptions));
+// CORS
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL || "*"
+        : "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 
-// API Routes
-app.use("/api/admin", adminRoutes);
-app.use("/api/events", eventRoutes);
-app.use("/api/upload", uploadRoute);
+// Routes
+app.use("/api/admin", require("./routes/admin"));
+app.use("/api/events", require("./routes/events"));
+app.use("/api/upload", require("./routes/upload"));
 app.use("/uploads", express.static("uploads"));
-app.use("/api/auth", authRoutes);
-app.use("/api/drill-videos", drillVideoRoutes);
-app.use("/api/users", require("./routes/auth"));
-app.use("/api/attendance", attendanceRoutes);
-app.use("/api/query", queryRoutes);
+app.use("/api/auth", require("./routes/auth"));
+app.use("/api/drill-videos", require("./routes/drillVideo"));
+app.use("/api/attendance", require("./routes/attendance"));
+app.use("/api/query", require("./routes/query"));
 
-// Handle favicon.ico requests to prevent 404 warnings
-app.get('/favicon.ico', (req, res) => res.status(204).end());
+// Serve frontend in production
+if (process.env.NODE_ENV === "production") {
+  const frontendPath = path.join(__dirname, "../Frontend/dist");
+  app.use(express.static(frontendPath));
 
-
-// Serve Frontend in Production
-if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, '../Frontend/dist')));
-
-  // Any route that is not an API route should serve the frontend
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../Frontend/dist/index.html'));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(frontendPath, "index.html"));
   });
 } else {
-  app.get('/', (req, res) => {
-    res.send('API is running... Frontend is on http://localhost:5173');
+  app.get("/", (req, res) => {
+    res.send("API running... Frontend at http://localhost:5173");
   });
 }
 
