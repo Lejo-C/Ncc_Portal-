@@ -5,8 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prebuild": "npm install --prefix ../Frontend",
-    "build": "npm install --prefix ../frontend && npm run build --prefix ../frontend && npm install",
-    "start": "npm run build && node server.js",
+    "build": "npm run build --prefix ../Frontend",
+    "start": "node server.js",
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "prod": "npm run build && node server.js"
   },
