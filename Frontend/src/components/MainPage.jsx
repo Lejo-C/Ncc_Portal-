@@ -5,23 +5,23 @@ import soldiers2 from "../image/soldiers2.jpg";
 import soldiers3 from "../image/soldiers3.jpg";
 
 const slides = [{
-    id: 0,
-    image: soldiers1,
-    title: "Excellence in Training",
-    description: "Comprehensive NCC education and skill development for tomorrow's leaders",
-  },
-  {
-    id: 1,
-    image: soldiers2,
-    title: "Leadership & Discipline",
-    description: "Shaping strong leaders through discipline and commitment to the nation",
-  },
-  {
-    id: 2,
-    image: soldiers3,
-    title: "Teamwork in Action",
-    description: "Building trust, unity, and collaboration among Indian NCC cadets",
-  },
+  id: 0,
+  image: soldiers1,
+  title: "Excellence in Training",
+  description: "Comprehensive NCC education and skill development for tomorrow's leaders",
+},
+{
+  id: 1,
+  image: soldiers2,
+  title: "Leadership & Discipline",
+  description: "Shaping strong leaders through discipline and commitment to the nation",
+},
+{
+  id: 2,
+  image: soldiers3,
+  title: "Teamwork in Action",
+  description: "Building trust, unity, and collaboration among Indian NCC cadets",
+},
 ];
 
 const MainPage = () => {
@@ -60,9 +60,8 @@ const MainPage = () => {
         {slides.map((slide, index) => (
           <div
             key={index}
-            className={`absolute top-0 w-full h-full flex flex-col justify-center items-center text-center px-5 transition-all duration-700 ${
-              index === currentSlide ? "left-0" : index < currentSlide ? "-left-full" : "left-full"
-            }`}
+            className={`absolute top-0 w-full h-full flex flex-col justify-center items-center text-center px-5 transition-all duration-700 ${index === currentSlide ? "left-0" : index < currentSlide ? "-left-full" : "left-full"
+              }`}
             style={{
               backgroundImage: `url(${slide.image})`,
               backgroundSize: "cover",
@@ -83,9 +82,8 @@ const MainPage = () => {
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full bg-white transition-opacity ${
-                index === currentSlide ? "opacity-100" : "opacity-50"
-              }`}
+              className={`w-3 h-3 rounded-full bg-white transition-opacity ${index === currentSlide ? "opacity-100" : "opacity-50"
+                }`}
             />
           ))}
         </div>
@@ -104,7 +102,7 @@ const MainPage = () => {
           <div className="border-l-4 border-green-500 bg-white p-5 rounded-xl shadow hover:shadow-md transition">
             <h3 className="text-lg font-semibold mb-1">Cadet Access</h3>
             <p className="text-sm text-gray-700 mb-1">Access attendance, training videos, and events</p>
-            <p className="text-xs">📌 Personal Dashboard | 🎥 Events & Training</p>
+            <p className="text-xs">Personal Dashboard | Events & Training</p>
           </div>
         </button>
 
@@ -116,7 +114,7 @@ const MainPage = () => {
           <div className="border-l-4 border-orange-500 bg-white p-5 rounded-xl shadow hover:shadow-md transition">
             <h3 className="text-lg font-semibold mb-1">Administrator Access</h3>
             <p className="text-sm text-gray-700 mb-1">Manage cadets, events, and attendance records</p>
-            <p className="text-xs">📝 Cadet Management | 📅 Event Planning</p>
+            <p className="text-xs">Cadet Management | Event Planning</p>
           </div>
         </button>
 

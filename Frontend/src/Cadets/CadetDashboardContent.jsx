@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+    ? '' // Use relative paths in production
+    : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function CadetDashboardContent() {
     const [attendance, setAttendance] = useState(null);
@@ -33,7 +35,7 @@ export default function CadetDashboardContent() {
     return (
         <div className="p-4 sm:p-6 max-w-7xl mx-auto">
             <h2 className="text-xl sm:text-2xl font-bold text-blue-700 mb-4 sm:mb-6">
-                ðŸŽ–ï¸ Welcome, {cadet?.name || "Cadet"}
+                Welcome, {cadet?.name || "Cadet"}
             </h2>
 
             {/* Summary Cards */}
@@ -41,7 +43,7 @@ export default function CadetDashboardContent() {
                 <div className="bg-white p-4 rounded-xl shadow text-center">
                     <p className="text-sm text-gray-500">Attendance</p>
                     <h3 className="text-xl sm:text-2xl font-bold text-green-600">
-                        {attendance?.percentage ?? "â€”"}%
+                        {attendance?.percentage ?? ""}%
                     </h3>
                 </div>
                 <div className="bg-white p-4 rounded-xl shadow text-center">
@@ -56,14 +58,14 @@ export default function CadetDashboardContent() {
 
             {/* Upcoming Events */}
             <div className="bg-white p-4 sm:p-5 rounded-xl shadow mb-4 sm:mb-6">
-                <h3 className="text-lg font-semibold mb-3">ðŸ“… Upcoming Events</h3>
+                <h3 className="text-lg font-semibold mb-3">Upcoming Events</h3>
                 <div className="space-y-2">
                     {events.length > 0 ? events.map((event, idx) => (
                         <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-3 rounded-lg gap-2">
                             <div className="flex-1">
                                 <p className="font-semibold">{event.title}</p>
                                 <p className="text-sm text-gray-500">
-                                    {new Date(event.date).toLocaleDateString()} at {event.time} â€” {event.location}
+                                    {new Date(event.date).toLocaleDateString()} at {event.time}  {event.location}
                                 </p>
                             </div>
                             <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs self-start sm:self-center">
@@ -78,7 +80,7 @@ export default function CadetDashboardContent() {
 
             {/* Training Videos */}
             <div className="bg-white p-4 sm:p-5 rounded-xl shadow">
-                <h3 className="text-lg font-semibold mb-3">ðŸŽ¥ Recent Training Videos</h3>
+                <h3 className="text-lg font-semibold mb-3">Recent Training Videos</h3>
                 <div className="space-y-2">
                     {videos.length > 0 ? videos.map((video, idx) => (
                         <div key={idx} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-50 p-3 rounded-lg gap-2">

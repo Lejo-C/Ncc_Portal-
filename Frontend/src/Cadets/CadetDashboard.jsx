@@ -3,7 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { updateProfile } from "../utils/api";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function CadetDashboard() {
   const [showContactModal, setShowContactModal] = useState(false);
@@ -117,29 +119,29 @@ export default function CadetDashboard() {
             </div>
             <div>
               <div className="font-semibold">{cadet?.name || "Cadet"}</div>
-              <div className="text-xs text-gray-500">{cadet?.rank || "â€”"}</div>
+              <div className="text-xs text-gray-500">{cadet?.rank || ""}</div>
             </div>
           </div>
         </div>
 
         <nav className="flex flex-col gap-2 text-sm font-medium">
           <Link to="#" className="flex items-center gap-2 px-3 py-2 rounded-md text-green-700 bg-green-50 hover:bg-green-100 transition">
-            ðŸ  Dashboard
+            Dashboard
           </Link>
           <Link to="/cdt-attendance" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            âœ”ï¸ Attendance
+            Attendance
           </Link>
           <Link to="/drill-videos" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            ðŸŽ¥ Drill Videos
+            Drill Videos
           </Link>
           <Link to="/query-box" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            ðŸ’¡ QueryBox
+           QueryBox
           </Link>
           <Link to="/events" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            ðŸ“… Events
+            Events
           </Link>
           <Link to="/profile" className="flex items-center gap-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
-            ðŸ‘¤ Profile
+            Profile
           </Link>
         </nav>
 
@@ -155,14 +157,14 @@ export default function CadetDashboard() {
 
       {/* Main Dashboard Content */}
       <main className="flex-1 p-6 overflow-y-auto">
-        <h2 className="text-2xl font-bold text-blue-700 mb-6">ðŸŽ–ï¸ Welcome, {cadet?.name || "Cadet"}</h2>
+        <h2 className="text-2xl font-bold text-blue-700 mb-6">Welcome, {cadet?.name || "Cadet"}</h2>
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-white p-4 rounded-xl shadow text-center">
             <p className="text-sm text-gray-500">Attendance</p>
             <h3 className="text-2xl font-bold text-green-600">
-              {attendance?.percentage ?? "â€”"}%
+              {attendance?.percentage ?? ""}%
             </h3>
           </div>
           <div className="bg-white p-4 rounded-xl shadow text-center">
@@ -177,13 +179,13 @@ export default function CadetDashboard() {
 
         {/* Upcoming Events */}
         <div className="bg-white p-5 rounded-xl shadow mb-6">
-          <h3 className="text-lg font-semibold mb-3">ðŸ“… Upcoming Events</h3>
+          <h3 className="text-lg font-semibold mb-3">Upcoming Events</h3>
           {events.map((event, idx) => (
             <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
               <div>
                 <p className="font-semibold">{event.title}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(event.date).toLocaleDateString()} at {event.time} â€” {event.location}
+                  {new Date(event.date).toLocaleDateString()} at {event.time} {event.location}
                 </p>
               </div>
               <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">
@@ -195,7 +197,7 @@ export default function CadetDashboard() {
 
         {/* Training Videos */}
         <div className="bg-white p-5 rounded-xl shadow">
-          <h3 className="text-lg font-semibold mb-3">ðŸŽ¥ Recent Training Videos</h3>
+          <h3 className="text-lg font-semibold mb-3">Recent Training Videos</h3>
           {videos.map((video, idx) => (
             <div key={idx} className="flex justify-between items-center bg-gray-50 p-3 rounded-lg mb-2">
               <div>

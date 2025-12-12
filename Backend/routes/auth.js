@@ -13,14 +13,23 @@ const router = express.Router();
 // Register
 router.post("/register", async (req, res) => {
   try {
-    const { regno, name, password, role } = req.body;
+    const { regno, name, email, phone, password, role } = req.body;
     if (!regno || !name || !password || !role) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ regno, name, password: hashedPassword, role });
+    const user = new User({
+      regno,
+      name,
+      email,
+      phone,
+      password: hashedPassword,
+      role
+    });
     await user.save();
+
+    console.log("✅ User registered:", { regno, name, email, phone, role });
 
     res.status(201).json({ message: "User registered" });
   } catch (err) {
@@ -38,12 +47,16 @@ router.post("/login", async (req, res) => {
   const { regno, email, password } = req.body;
 
   try {
+    console.log("Login attempt:", { regno, email, hasPassword: !!password });
+
     // Find user by regno (cadets) or email (admins)
     let user;
     if (regno) {
       user = await User.findOne({ regno });
+      console.log("User found by regno:", !!user);
     } else if (email) {
       user = await User.findOne({ email });
+      console.log("User found by email:", !!user);
     } else {
       return res.status(400).json({ message: "Please provide regno or email" });
     }
@@ -52,6 +65,12 @@ router.post("/login", async (req, res) => {
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
+
+    // Check JWT_SECRET
+    if (!process.env.JWT_SECRET) {
+      console.error("❌ JWT_SECRET is not defined in environment variables!");
+      return res.status(500).json({ message: "Server configuration error" });
+    }
 
     // Generate JWT token
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -71,6 +90,8 @@ router.post("/login", async (req, res) => {
     });
     await session.save();
 
+    console.log("✅ Login successful for:", email || regno);
+
     // Return token only, frontend will fetch user data separately
     res.json({
       token,
@@ -78,8 +99,9 @@ router.post("/login", async (req, res) => {
       message: "Login successful"
     });
   } catch (err) {
-    console.error("Login error:", err);
-    res.status(500).json({ message: "Server error" });
+    console.error("❌ Login error:", err.message);
+    console.error("Stack trace:", err.stack);
+    res.status(500).json({ message: "Server error: " + err.message });
   }
 });
 

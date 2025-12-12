@@ -6,7 +6,9 @@ import soldiers1 from "../image/soldiers1.jpg";
 import soldiers2 from "../image/soldiers2.jpg";
 import soldiers3 from "../image/soldiers3.jpg";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const slides = [
   {
@@ -119,7 +121,7 @@ export default function AdminLogin() {
           <h2 className="text-center text-2xl font-semibold mb-2">Administrator Login</h2>
           <p className="text-center text-gray-600 mb-5">Sign in to access your NCC admin portal</p>
 
-          <a href="/" className="text-sm text-gray-700 hover:underline block mb-4">â† Back to user selection</a>
+          <a href="/" className="text-sm text-gray-700 hover:underline block mb-4"> Back to user selection</a>
 
           <form onSubmit={handleLogin}>
             <div className="mb-4">

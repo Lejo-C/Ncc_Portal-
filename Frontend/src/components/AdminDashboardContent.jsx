@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+    ? '' // Use relative paths in production
+    : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function AdminDashboardContent() {
     const [stats, setStats] = useState({});
@@ -37,7 +39,7 @@ export default function AdminDashboardContent() {
                 ].map((stat, idx) => (
                     <div key={idx} className="bg-white p-4 sm:p-5 rounded-xl shadow text-center">
                         <p className="text-sm text-gray-500">{stat.label}</p>
-                        <h3 className="text-xl sm:text-2xl font-bold mt-2">{stat.value ?? "â€”"}</h3>
+                        <h3 className="text-xl sm:text-2xl font-bold mt-2">{stat.value ?? ""}</h3>
                     </div>
                 ))}
             </div>

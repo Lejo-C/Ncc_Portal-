@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function CadetAttendancePage() {
   const [attendance, setAttendance] = useState(null);
@@ -20,7 +22,7 @@ export default function CadetAttendancePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <h1 className="text-2xl font-bold text-blue-700 mb-4">ðŸ“Š My Attendance</h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-4">My Attendance</h1>
 
       {/* Summary */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">

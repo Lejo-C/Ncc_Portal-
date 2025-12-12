@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function CadetManagementPage() {
   const [cadets, setCadets] = useState([]);
@@ -9,8 +11,8 @@ export default function CadetManagementPage() {
   const [newCadet, setNewCadet] = useState({ regno: "", name: "", password: "" });
   const [showRankModal, setShowRankModal] = useState(false);
   const [rankForm, setRankForm] = useState({ id: "", rank: "" });
-const [selectedCadet, setSelectedCadet] = useState(null);
-const [showProfileModal, setShowProfileModal] = useState(false);
+  const [selectedCadet, setSelectedCadet] = useState(null);
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
 
   useEffect(() => {
@@ -74,7 +76,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-orange-700">ðŸ§‘â€âœˆï¸ Registered Cadets</h1>
+          <h1 className="text-2xl font-bold text-orange-700">Registered Cadets</h1>
           <p className="text-sm text-gray-600">List of all cadets who have registered in the portal</p>
         </div>
         <button
@@ -100,43 +102,43 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           </thead>
           <tbody className="text-sm text-gray-700">
             {cadets.map((cadet, idx) => (
-  <tr key={idx} className="border-t border-gray-200 hover:bg-orange-50">
-    <td className="px-4 py-3">{cadet.regno || "â€”"}</td>
-    <td className="px-4 py-3">{cadet.name || "â€”"}</td>
-    <td className="px-4 py-3">{cadet.rank || "â€”"}</td>
-    <td className="px-4 py-3">{cadet.email || "â€”"}</td>
-    <td className="px-4 py-3">{cadet.phone || "â€”"}</td>
-    <td className="px-4 py-3">
-      {cadet.createdAt ? new Date(cadet.createdAt).toLocaleDateString() : "â€”"}
-    </td>
-    <td className="px-4 py-3 flex flex-wrap gap-2">
-      <button
-        onClick={() => {
-          setSelectedCadet(cadet);
-          setShowProfileModal(true);
-        }}
-        className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
-      >
-        View Details
-      </button>
-      <button
-        onClick={() => {
-          setRankForm({ id: cadet._id, rank: cadet.rank || "" });
-          setShowRankModal(true);
-        }}
-        className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Update Rank
-      </button>
-      <button
-        onClick={() => handleDeleteCadet(cadet._id)}
-        className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
-      >
-        Delete
-      </button>
-    </td>
-  </tr>
-))}
+              <tr key={idx} className="border-t border-gray-200 hover:bg-orange-50">
+                <td className="px-4 py-3">{cadet.regno || ""}</td>
+                <td className="px-4 py-3">{cadet.name || ""}</td>
+                <td className="px-4 py-3">{cadet.rank || ""}</td>
+                <td className="px-4 py-3">{cadet.email || ""}</td>
+                <td className="px-4 py-3">{cadet.phone || ""}</td>
+                <td className="px-4 py-3">
+                  {cadet.createdAt ? new Date(cadet.createdAt).toLocaleDateString() : ""}
+                </td>
+                <td className="px-4 py-3 flex flex-wrap gap-2">
+                  <button
+                    onClick={() => {
+                      setSelectedCadet(cadet);
+                      setShowProfileModal(true);
+                    }}
+                    className="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => {
+                      setRankForm({ id: cadet._id, rank: cadet.rank || "" });
+                      setShowRankModal(true);
+                    }}
+                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                  >
+                    Update Rank
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCadet(cadet._id)}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
@@ -206,7 +208,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
       {showRankModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md relative">
-                        <h2 className="text-xl font-bold mb-4 text-blue-700">Update Cadet Rank</h2>
+            <h2 className="text-xl font-bold mb-4 text-blue-700">Update Cadet Rank</h2>
             <form onSubmit={handleRankSubmit}>
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">New Rank</label>
@@ -237,36 +239,36 @@ const [showProfileModal, setShowProfileModal] = useState(false);
           </div>
         </div>
 
-        
+
       )}
       {showProfileModal && selectedCadet && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-2xl overflow-y-auto max-h-[90vh]">
-      <h2 className="text-xl font-bold mb-4 text-green-700">Cadet Details</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm text-gray-700">
-        <div><strong>Reg No:</strong> {selectedCadet.regno}</div>
-        <div><strong>Name:</strong> {selectedCadet.name}</div>
-        <div><strong>Rank:</strong> {selectedCadet.rank}</div>
-        <div><strong>Email:</strong> {selectedCadet.email}</div>
-        <div><strong>Phone:</strong> {selectedCadet.phone}</div>
-        <div><strong>Bank Account:</strong> {selectedCadet.bankAccount}</div>
-        <div><strong>IFSC Code:</strong> {selectedCadet.ifsc}</div>
-        <div><strong>DOB:</strong> {selectedCadet.dob ? new Date(selectedCadet.dob).toLocaleDateString() : "â€”"}</div>
-        <div><strong>Father's Name:</strong> {selectedCadet.fatherName}</div>
-        <div><strong>Mother's Name:</strong> {selectedCadet.motherName}</div>
-        <div className="sm:col-span-2"><strong>Address:</strong> {selectedCadet.address}</div>
-      </div>
-      <div className="mt-6 text-right">
-        <button
-          onClick={() => setShowProfileModal(false)}
-          className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
-        >
-          Close
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-2xl overflow-y-auto max-h-[90vh]">
+            <h2 className="text-xl font-bold mb-4 text-green-700">Cadet Details</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-sm text-gray-700">
+              <div><strong>Reg No:</strong> {selectedCadet.regno}</div>
+              <div><strong>Name:</strong> {selectedCadet.name}</div>
+              <div><strong>Rank:</strong> {selectedCadet.rank}</div>
+              <div><strong>Email:</strong> {selectedCadet.email}</div>
+              <div><strong>Phone:</strong> {selectedCadet.phone}</div>
+              <div><strong>Bank Account:</strong> {selectedCadet.bankAccount}</div>
+              <div><strong>IFSC Code:</strong> {selectedCadet.ifsc}</div>
+              <div><strong>DOB:</strong> {selectedCadet.dob ? new Date(selectedCadet.dob).toLocaleDateString() : ""}</div>
+              <div><strong>Father's Name:</strong> {selectedCadet.fatherName}</div>
+              <div><strong>Mother's Name:</strong> {selectedCadet.motherName}</div>
+              <div className="sm:col-span-2"><strong>Address:</strong> {selectedCadet.address}</div>
+            </div>
+            <div className="mt-6 text-right">
+              <button
+                onClick={() => setShowProfileModal(false)}
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );

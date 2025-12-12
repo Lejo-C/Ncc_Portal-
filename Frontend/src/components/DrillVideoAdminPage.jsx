@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function DrillVideoAdminPage() {
   const [videos, setVideos] = useState([]);
@@ -66,7 +68,7 @@ export default function DrillVideoAdminPage() {
     <div className="min-h-screen bg-gray-50 p-6 font-sans relative">
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-orange-700">ðŸ“¤ Drill Video Management</h1>
+          <h1 className="text-2xl font-bold text-orange-700">Drill Video Management</h1>
           <p className="text-sm text-gray-600">Manage uploaded videos and add new training content</p>
         </div>
         <button
@@ -95,14 +97,14 @@ export default function DrillVideoAdminPage() {
           <div key={idx} className="bg-white rounded-xl shadow p-4 border border-gray-200">
             <video controls src={video.videoUrl} className="w-full h-40 object-cover rounded-md mb-3" />
             <h3 className="text-lg font-semibold text-gray-800">{video.title}</h3>
-            <div className="text-sm text-gray-500">ðŸ‘ï¸ {video.views} views</div>
+            <div className="text-sm text-gray-500">{video.views} views</div>
 
             <button
-  onClick={() => setActiveVideo(video.videoUrl)}
-  className="mt-3 px-4 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
->
-  Watch Now
-</button>
+              onClick={() => setActiveVideo(video.videoUrl)}
+              className="mt-3 px-4 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
+            >
+              Watch Now
+            </button>
 
 
             <button
@@ -120,23 +122,23 @@ export default function DrillVideoAdminPage() {
       </section>
 
       {activeVideo && (
-  <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl relative">
-      <button
-        onClick={() => setActiveVideo(null)}
-        className="absolute top-2 right-2 text-red-600 font-bold text-xl"
-      >
-        Ã—
-      </button>
-      <video
-        src={activeVideo}
-        controls
-        autoPlay
-        className="w-full h-[400px] object-contain rounded"
-      />
-    </div>
-  </div>
-)}
+        <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-4 w-full max-w-3xl relative">
+            <button
+              onClick={() => setActiveVideo(null)}
+              className="absolute top-2 right-2 text-red-600 font-bold text-xl"
+            >
+              Ã—
+            </button>
+            <video
+              src={activeVideo}
+              controls
+              autoPlay
+              className="w-full h-[400px] object-contain rounded"
+            />
+          </div>
+        </div>
+      )}
 
 
       {/* Upload Modal */}

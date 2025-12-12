@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+    ? '' // Use relative paths in production
+    : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function CadetSignup() {
     const [formData, setFormData] = useState({
@@ -53,7 +55,7 @@ export default function CadetSignup() {
             const data = await res.json();
 
             if (res.ok) {
-                alert("âœ… Registration successful! Please login with your credentials.");
+                alert("Registration successful! Please login with your credentials.");
                 navigate("/cdt-login");
             } else {
                 setError(data.message || "Registration failed");
@@ -195,7 +197,7 @@ export default function CadetSignup() {
 
                 <div className="mt-4 text-center">
                     <Link to="/" className="text-xs text-gray-500 hover:underline">
-                        â† Back to home
+                         Back to home
                     </Link>
                 </div>
             </div>

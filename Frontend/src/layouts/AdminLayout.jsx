@@ -43,8 +43,8 @@ export default function AdminLayout() {
             to={to}
             onClick={closeMobileMenu}
             className={`flex items-center px-5 py-3 mx-2 rounded-lg text-sm font-medium ${isActive(to)
-                    ? "bg-orange-400 text-white"
-                    : "text-gray-800 hover:bg-orange-100"
+                ? "bg-orange-400 text-white"
+                : "text-gray-800 hover:bg-orange-100"
                 }`}
         >
             <span className="mr-2">{icon}</span>
@@ -102,12 +102,12 @@ export default function AdminLayout() {
                         <p className="text-sm text-gray-500 truncate">{admin?.rank || "Commanding Officer"}</p>
                     </div>
                     <nav className="mt-5">
-                        <NavLink to="/admin/dashboard" icon="📊" label="Dashboard" />
-                        <NavLink to="/admin/cadet-management" icon="👥" label="Manage Cadets" />
-                        <NavLink to="/admin/events" icon="📅" label="Manage Events" />
-                        <NavLink to="/admin/drill-videos" icon="🎥" label="Drill Videos" />
-                        <NavLink to="/admin/attendance" icon="✔️" label="Attendance" />
-                        <NavLink to="/admin/query-box" icon="💡" label="Query Box" />
+                        <NavLink to="/admin/dashboard" icon="" label="Dashboard" />
+                        <NavLink to="/admin/cadet-management" icon="" label="Manage Cadets" />
+                        <NavLink to="/admin/events" icon="" label="Manage Events" />
+                        <NavLink to="/admin/drill-videos" icon="" label="Drill Videos" />
+                        <NavLink to="/admin/attendance" icon="" label="Attendance" />
+                        <NavLink to="/admin/query-box" icon="" label="Query Box" />
                     </nav>
                 </div>
                 <div className="p-4 border-t border-gray-300">

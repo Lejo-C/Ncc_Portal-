@@ -43,8 +43,8 @@ export default function CadetLayout() {
             to={to}
             onClick={closeMobileMenu}
             className={`flex items-center gap-2 px-3 py-2 rounded-md transition ${isActive(to)
-                    ? "text-green-700 bg-green-50"
-                    : "text-gray-700 hover:bg-gray-100"
+                ? "text-green-700 bg-green-50"
+                : "text-gray-700 hover:bg-gray-100"
                 }`}
         >
             <span className="text-lg">{icon}</span> {label}
@@ -107,12 +107,12 @@ export default function CadetLayout() {
 
                 {/* Navigation */}
                 <nav className="flex flex-col gap-2 text-sm font-medium flex-1 overflow-y-auto">
-                    <NavLink to="/cadet/dashboard" icon="🏠" label="Dashboard" />
-                    <NavLink to="/cadet/attendance" icon="✔️" label="Attendance" />
-                    <NavLink to="/cadet/drill-videos" icon="🎥" label="Drill Videos" />
-                    <NavLink to="/cadet/query-box" icon="💡" label="QueryBox" />
-                    <NavLink to="/cadet/events" icon="📅" label="Events" />
-                    <NavLink to="/cadet/profile" icon="👤" label="Profile" />
+                    <NavLink to="/cadet/dashboard" icon="" label="Dashboard" />
+                    <NavLink to="/cadet/attendance" icon="" label="Attendance" />
+                    <NavLink to="/cadet/drill-videos" icon="" label="Drill Videos" />
+                    <NavLink to="/cadet/query-box" icon="" label="QueryBox" />
+                    <NavLink to="/cadet/events" icon="" label="Events" />
+                    <NavLink to="/cadet/profile" icon="" label="Profile" />
                 </nav>
 
                 {/* Logout */}

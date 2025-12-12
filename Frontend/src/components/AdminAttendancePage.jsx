@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_URL = import.meta.env.MODE === 'production'
+  ? '' // Use relative paths in production
+  : import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 export default function AdminAttendancePage() {
   const [cadets, setCadets] = useState([]);
@@ -66,7 +68,7 @@ export default function AdminAttendancePage() {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6 font-sans">
-      <h1 className="text-2xl font-bold text-blue-700 mb-4">ðŸ“‹ Attendance Management</h1>
+      <h1 className="text-2xl font-bold text-blue-700 mb-4">Attendance Management</h1>
 
       {/* Overall Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
@@ -88,7 +90,7 @@ export default function AdminAttendancePage() {
         onClick={fetchHistory}
         className="mb-4 px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700"
       >
-        ðŸ“… View Previous Attendance
+        View Previous Attendance
       </button>
 
       {/* Mark Attendance Form */}
@@ -142,18 +144,16 @@ export default function AdminAttendancePage() {
               {cadets.map((cadet, idx) => (
                 <tr key={idx} className="border-t border-gray-200 hover:bg-blue-50">
                   <td className="px-4 py-3 flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${
-                      attendance[cadet._id] ? "bg-green-600" : "bg-red-600"
-                    }`}>
+                    <span className={`px-2 py-1 rounded-full text-xs font-bold text-white ${attendance[cadet._id] ? "bg-green-600" : "bg-red-600"
+                      }`}>
                       {cadet.name?.split(" ").map(w => w[0]).join("").toUpperCase()}
                     </span>
                     {cadet.name}
                   </td>
-                  <td className="px-4 py-3">{cadet.unit || "â€”"}</td>
+                  <td className="px-4 py-3">{cadet.unit || ""}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                      attendance[cadet._id] ? "bg-green-600 text-white" : "bg-red-600 text-white"
-                    }`}>
+                    <span className={`px-2 py-1 rounded text-xs font-semibold ${attendance[cadet._id] ? "bg-green-600 text-white" : "bg-red-600 text-white"
+                      }`}>
                       {attendance[cadet._id] ? "Present" : "Absent"}
                     </span>
                   </td>
@@ -197,7 +197,7 @@ export default function AdminAttendancePage() {
                   className="bg-gray-100 hover:bg-purple-100 p-3 rounded-lg text-left border"
                 >
                   <h3 className="font-semibold text-gray-800">
-                    {new Date(record.date).toLocaleDateString()} â€” {record.type.toUpperCase()}
+                    {new Date(record.date).toLocaleDateString()}  {record.type.toUpperCase()}
                   </h3>
                   <p className="text-sm text-gray-500">
                     {record.records.filter(r => r.present).length} Present
@@ -207,35 +207,35 @@ export default function AdminAttendancePage() {
             </div>
 
             {selectedRecord && (
-  <div className="border-t pt-4">
-    <h3 className="text-md font-semibold text-gray-800 mb-2">
-      Attendance on {new Date(selectedRecord.date).toLocaleDateString()} ({selectedRecord.type})
-    </h3>
+              <div className="border-t pt-4">
+                <h3 className="text-md font-semibold text-gray-800 mb-2">
+                  Attendance on {new Date(selectedRecord.date).toLocaleDateString()} ({selectedRecord.type})
+                </h3>
 
-    {/* Present Cadets */}
-    <div className="mb-4">
-      <h4 className="text-sm font-semibold text-green-700 mb-1">âœ… Present Cadets:</h4>
-      <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
-        {selectedRecord.records
-          .filter(r => r.present)
-          .map((r, i) => (
-            <li key={i}>{r.cadetName || r.cadetId}</li>
-          ))}
-      </ul>
-    </div>
+                {/* Present Cadets */}
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-green-700 mb-1">âœ… Present Cadets:</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
+                    {selectedRecord.records
+                      .filter(r => r.present)
+                      .map((r, i) => (
+                        <li key={i}>{r.cadetName || r.cadetId}</li>
+                      ))}
+                  </ul>
+                </div>
 
-    {/* Absent Cadets */}
-    <div>
-      <h4 className="text-sm font-semibold text-red-700 mb-1">âŒ Absent Cadets:</h4>
-      <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
-        {selectedRecord.records
-          .filter(r => !r.present)
-          .map((r, i) => (
-            <li key={i}>{r.cadetName || r.cadetId}</li>
-          ))}
-      </ul>
-    </div>
-  </div>
+                {/* Absent Cadets */}
+                <div>
+                  <h4 className="text-sm font-semibold text-red-700 mb-1">âŒ Absent Cadets:</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-800 max-h-40 overflow-y-auto">
+                    {selectedRecord.records
+                      .filter(r => !r.present)
+                      .map((r, i) => (
+                        <li key={i}>{r.cadetName || r.cadetId}</li>
+                      ))}
+                  </ul>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -244,4 +244,3 @@ export default function AdminAttendancePage() {
   );
 }
 
-                
