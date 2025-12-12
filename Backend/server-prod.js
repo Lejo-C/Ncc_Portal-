@@ -41,14 +41,13 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
-// API Routes
+// API Routes - IMPORTANT: Define these BEFORE static files and catch-all
 app.use("/api/admin", adminRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/upload", uploadRoute);
 app.use("/uploads", express.static("uploads"));
-app.use("/api/auth", authRoutes);
+app.use("/api/users", authRoutes);  // Main auth routes (login, register, etc.)
 app.use("/api/drill-videos", drillVideoRoutes);
-app.use("/api/users", require("./routes/auth"));
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/query", queryRoutes);
 
@@ -60,16 +59,6 @@ const frontendPath = path.join(__dirname, '../Frontend/dist');
 console.log('Serving frontend from:', frontendPath);
 
 app.use(express.static(frontendPath));
-
-// Handle API 404s - must come after all API routes but before catch-all
-app.use('/api/*', (req, res) => {
-    console.error('❌ API endpoint not found:', req.method, req.originalUrl);
-    res.status(404).json({
-        error: 'API endpoint not found',
-        path: req.originalUrl,
-        method: req.method
-    });
-});
 
 // Any route that is NOT an API route should serve the frontend
 // This must come AFTER all API routes to avoid catching them
