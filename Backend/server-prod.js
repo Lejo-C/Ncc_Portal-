@@ -61,8 +61,23 @@ console.log('Serving frontend from:', frontendPath);
 
 app.use(express.static(frontendPath));
 
-// Any route that is not an API route should serve the frontend
-app.get('*', (req, res) => {
+// Handle API 404s - must come after all API routes but before catch-all
+app.use('/api/*', (req, res) => {
+    console.error('❌ API endpoint not found:', req.method, req.originalUrl);
+    res.status(404).json({
+        error: 'API endpoint not found',
+        path: req.originalUrl,
+        method: req.method
+    });
+});
+
+// Any route that is NOT an API route should serve the frontend
+// This must come AFTER all API routes to avoid catching them
+app.get('*', (req, res, next) => {
+    // Skip if this is an API request
+    if (req.path.startsWith('/api/')) {
+        return next();
+    }
     res.sendFile(path.join(frontendPath, 'index.html'));
 });
 
